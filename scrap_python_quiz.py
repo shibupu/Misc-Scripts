@@ -1,5 +1,6 @@
-import mechanize
 from bs4 import BeautifulSoup
+import mechanize
+import re
 
 br = mechanize.Browser()
 br.open('http://www.mypythonquiz.com/list.php')
@@ -19,8 +20,7 @@ for l in br.links(url_regex='question.php', text_regex="\d+: "):
         html = br_qn.response().read()
         soup = BeautifulSoup(html)
         trs = soup.find_all("tr")
-        tr = trs.pop(0)
-        tr_text = tr.get_text()
+        tr = re.sub("\r\n", "\n", tr.get_text())
         fh.write(tr_text + "\n")
         print tr_text
         i = 97
